@@ -67,34 +67,34 @@ public class Stock {
         double volatility = (MIN_VOLATILITY + DIF_VOLATILITY * new Random().nextDouble());
         // The stock is more likely to follow the trajectory it was following the day before
         int sign = 1;
-        if (goUp) {
-            sign = 1;
-            upwardsTrajectory++;
-            if (upwardsTrajectory >= MIN_UPWARDS_TRAJECTORY && upwardsTrajectory <= MAX_UPWARDS_TRAJECTORY && Math.random() < CHANCE_CHANGING_IN_UPWARDS) {
-                upwardsTrajectory = 0;
-                downwardsTrajectory++;
-                goUp = false;
-            }
-            else if (upwardsTrajectory > MAX_UPWARDS_TRAJECTORY) {
-                upwardsTrajectory = 0;
-                downwardsTrajectory++;
-                goUp = false;
-            }
-        }
-        else {
-            sign = -1;
-            downwardsTrajectory++;
-            if (downwardsTrajectory >= MIN_DOWNWARDS_TRAJECTORY && downwardsTrajectory <= MAX_DOWNWARDS_TRAJECTORY && Math.random() < CHANCE_CHANGING_IN_DOWNWARDS) {
-                downwardsTrajectory = 0;
-                upwardsTrajectory++;
-                goUp = true;
-            }
-            else if (downwardsTrajectory > MAX_DOWNWARDS_TRAJECTORY) {
-                downwardsTrajectory = 0;
-                upwardsTrajectory++;
-                goUp = true;
-            }
-        }
+//        if (goUp) {
+//            sign = 1;
+//            upwardsTrajectory++;
+//            if (upwardsTrajectory >= MIN_UPWARDS_TRAJECTORY && upwardsTrajectory <= MAX_UPWARDS_TRAJECTORY && Math.random() < CHANCE_CHANGING_IN_UPWARDS) {
+//                upwardsTrajectory = 0;
+//                downwardsTrajectory++;
+//                goUp = false;
+//            }
+//            else if (upwardsTrajectory > MAX_UPWARDS_TRAJECTORY) {
+//                upwardsTrajectory = 0;
+//                downwardsTrajectory++;
+//                goUp = false;
+//            }
+//        }
+//        else {
+//            sign = -1;
+//            downwardsTrajectory++;
+//            if (downwardsTrajectory >= MIN_DOWNWARDS_TRAJECTORY && downwardsTrajectory <= MAX_DOWNWARDS_TRAJECTORY && Math.random() < CHANCE_CHANGING_IN_DOWNWARDS) {
+//                downwardsTrajectory = 0;
+//                upwardsTrajectory++;
+//                goUp = true;
+//            }
+//            else if (downwardsTrajectory > MAX_DOWNWARDS_TRAJECTORY) {
+//                downwardsTrajectory = 0;
+//                upwardsTrajectory++;
+//                goUp = true;
+//            }
+//        }
         double price = prevPrice + (prevPrice * sign * volatility);
         if (price < 0) {
             crashed = true;

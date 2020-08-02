@@ -51,7 +51,7 @@ public class Display extends JComponent {
     private void drawStockGraph(Graphics2D g2) {
         g2.setColor(Color.WHITE);
         g2.fillRect(stockGraphPanelRect.x, stockGraphPanelRect.y, stockGraphPanelRect.width, stockGraphPanelRect.height);
-        int xMax = 31;
+        int xMax = 62;
         int drawXIncrement = (int)Math.floor((double)stockGraphPanelRect.width/(xMax-1));
         int yMax = (int)control.getPrice(Math.min(control.getDay()+xMax, control.getDayCrashed())) + 10;
         int yIncrement = (int) (Math.abs(control.getPrice(control.getDay()) - control.getPrice(Math.min(control.getDay()+xMax, control.getDayCrashed()))) / stockGraphPanelRect.height);
@@ -80,21 +80,24 @@ public class Display extends JComponent {
             start = control.getDay()-xMax;
         int i = 0;
         for (int day = start; day < control.getDay(); day++) {
-            x = stockGraphPanelRect.x + 3*rad/2 + i*drawXIncrement;
-            y = stockGraphPanelRect.y + stockGraphPanelRect.height - rad - rad/2 - (int)control.getPrice(day)/drawYIncrement;
+            x = stockGraphPanelRect.x + i*drawXIncrement;
+            y = stockGraphPanelRect.y + stockGraphPanelRect.height - (int)control.getPrice(day)/drawYIncrement;
             g2.setColor(Color.black);
-            g2.fillOval(x, y, rad, rad);
+            g2.fillOval(x+rad/2, y-3*rad/2, rad, rad);
             if (i > 0) {
-                int x0 = stockGraphPanelRect.x + 3*rad/2 + (i-1)*drawXIncrement;
-                int y0 = stockGraphPanelRect.y + stockGraphPanelRect.height - rad - rad/2 - (int)control.getPrice(day-1)/drawYIncrement;
+                int x0 = stockGraphPanelRect.x + (i-1)*drawXIncrement;
+                int y0 = stockGraphPanelRect.y + stockGraphPanelRect.height - (int)control.getPrice(day-1)/drawYIncrement;
                 if (control.getPrice(day-1) <= control.getPrice(day))
                     g2.setColor(Color.green.darker());
                 else
                     g2.setColor(Color.red);
-                g2.drawLine(x0+rad/2, y0+rad/2, x+rad/2, y+rad/2);
+                g2.drawLine(x0+rad, y0-rad, x+rad, y-rad);
             }
             i++;
         }
+
+        g2.drawOval(500+5, 500+5, 10, 10);
+        g2.drawLine(510, 510, 600, 505);
     }
 
     private void drawButtons(Graphics2D g2) {
