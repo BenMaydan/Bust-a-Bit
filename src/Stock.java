@@ -3,8 +3,8 @@ import java.util.Random;
 
 public class Stock {
     // Changes the time it takes for the stock to crash
-    public static final int MAX_ROLLAGE_MIN = 1;
-    public static final int MAX_ROLLAGE_MAX = 2*365;
+    public static final int MAX_ROLLAGE_MIN = 0;
+    public static final int MAX_ROLLAGE_MAX = 365;
     // The amount the MAX_ROLLAGE can differ by
     public static final int MAX_ROLLAGE_DIF = MAX_ROLLAGE_MAX-MAX_ROLLAGE_MIN;
 
@@ -53,8 +53,8 @@ public class Stock {
         // The stock will "roll" for a maximum of MAX_ROLLAGE days before crashing
         int today = 1;
         while (!crashed) {
-            if (today == dayCrashed) {
-                history[today] = 0.0;
+            if (today-1 == dayCrashed) {
+                history[today-1] = 0.0;
                 break;
             }
             history[today] = calculatePrice(today-1);
@@ -67,34 +67,34 @@ public class Stock {
         double volatility = (MIN_VOLATILITY + DIF_VOLATILITY * new Random().nextDouble());
         // The stock is more likely to follow the trajectory it was following the day before
         int sign = 1;
-//        if (goUp) {
-//            sign = 1;
-//            upwardsTrajectory++;
-//            if (upwardsTrajectory >= MIN_UPWARDS_TRAJECTORY && upwardsTrajectory <= MAX_UPWARDS_TRAJECTORY && Math.random() < CHANCE_CHANGING_IN_UPWARDS) {
-//                upwardsTrajectory = 0;
-//                downwardsTrajectory++;
-//                goUp = false;
-//            }
-//            else if (upwardsTrajectory > MAX_UPWARDS_TRAJECTORY) {
-//                upwardsTrajectory = 0;
-//                downwardsTrajectory++;
-//                goUp = false;
-//            }
-//        }
-//        else {
-//            sign = -1;
-//            downwardsTrajectory++;
-//            if (downwardsTrajectory >= MIN_DOWNWARDS_TRAJECTORY && downwardsTrajectory <= MAX_DOWNWARDS_TRAJECTORY && Math.random() < CHANCE_CHANGING_IN_DOWNWARDS) {
-//                downwardsTrajectory = 0;
-//                upwardsTrajectory++;
-//                goUp = true;
-//            }
-//            else if (downwardsTrajectory > MAX_DOWNWARDS_TRAJECTORY) {
-//                downwardsTrajectory = 0;
-//                upwardsTrajectory++;
-//                goUp = true;
-//            }
-//        }
+        if (goUp) {
+            sign = 1;
+            upwardsTrajectory++;
+            if (upwardsTrajectory >= MIN_UPWARDS_TRAJECTORY && upwardsTrajectory <= MAX_UPWARDS_TRAJECTORY && Math.random() < CHANCE_CHANGING_IN_UPWARDS) {
+                upwardsTrajectory = 0;
+                downwardsTrajectory++;
+                goUp = false;
+            }
+            else if (upwardsTrajectory > MAX_UPWARDS_TRAJECTORY) {
+                upwardsTrajectory = 0;
+                downwardsTrajectory++;
+                goUp = false;
+            }
+        }
+        else {
+            sign = -1;
+            downwardsTrajectory++;
+            if (downwardsTrajectory >= MIN_DOWNWARDS_TRAJECTORY && downwardsTrajectory <= MAX_DOWNWARDS_TRAJECTORY && Math.random() < CHANCE_CHANGING_IN_DOWNWARDS) {
+                downwardsTrajectory = 0;
+                upwardsTrajectory++;
+                goUp = true;
+            }
+            else if (downwardsTrajectory > MAX_DOWNWARDS_TRAJECTORY) {
+                downwardsTrajectory = 0;
+                upwardsTrajectory++;
+                goUp = true;
+            }
+        }
         double price = prevPrice + (prevPrice * sign * volatility);
         if (price < 0) {
             crashed = true;
@@ -124,7 +124,7 @@ public class Stock {
     }
 
     public int getDayCrashed() {
-        return history.length;
+        return history.length-1;
     }
 
     public double getPrice(int day) {

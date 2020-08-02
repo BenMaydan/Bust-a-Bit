@@ -15,14 +15,17 @@ public class Control {
         this.display = display;
         this.game = game;
 
+        Timer gameTickerTimer = new Timer(true);
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                game.advanceDay();
+                if (getDay() == getDayCrashed())
+                    gameTickerTimer.cancel();
+                else
+                    game.advanceDay();
                 display.repaint();
             }
         };
-        Timer gameTickerTimer = new Timer(true);
         gameTickerTimer.schedule(task, new Date(), 100);
     }
 

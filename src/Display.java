@@ -52,11 +52,11 @@ public class Display extends JComponent {
         g2.setColor(Color.WHITE);
         g2.fillRect(stockGraphPanelRect.x, stockGraphPanelRect.y, stockGraphPanelRect.width, stockGraphPanelRect.height);
         int xMax = 31;
-        int yMax = 100;
-        int yIncrement = 1;
-        int yDrawTimes = yMax/yIncrement;
         int drawXIncrement = (int)Math.floor((double)stockGraphPanelRect.width/(xMax-1));
-        int drawYIncrement = stockGraphPanelRect.height/(yDrawTimes);
+        int yMax = (int)control.getPrice(Math.min(control.getDay()+xMax, control.getDayCrashed())) + 10;
+        int yIncrement = (int) (Math.abs(control.getPrice(control.getDay()) - control.getPrice(Math.min(control.getDay()+xMax, control.getDayCrashed()))) / stockGraphPanelRect.height);
+        int yDrawTimes = 100;
+        int drawYIncrement = stockGraphPanelRect.height/yDrawTimes;
 
         int x = stockGraphPanelRect.x+drawXIncrement/2;
         int y = stockGraphPanelRect.y;
@@ -75,18 +75,19 @@ public class Display extends JComponent {
 
         // Draw points
         int rad = 5;
-        // Go until it crashes or until the end of the graph
-        int stop = Math.min(control.getDay()+xMax, control.getDayCrashed());
+        int start = 0;
+        if (control.getDay() > xMax)
+            start = control.getDay()-xMax;
         int i = 0;
-        for (int day = control.getDay(); day < stop; day++) {
-            x = stockGraphPanelRect.x - rad/2 + i*drawXIncrement;
+        for (int day = start; day < control.getDay(); day++) {
+            x = stockGraphPanelRect.x + 3*rad/2 + i*drawXIncrement;
             y = stockGraphPanelRect.y + stockGraphPanelRect.height - rad - rad/2 - (int)control.getPrice(day)/drawYIncrement;
             g2.setColor(Color.black);
             g2.fillOval(x, y, rad, rad);
             if (i > 0) {
-                int x0 = stockGraphPanelRect.x - rad/2 + (i-1)*drawXIncrement;
+                int x0 = stockGraphPanelRect.x + 3*rad/2 + (i-1)*drawXIncrement;
                 int y0 = stockGraphPanelRect.y + stockGraphPanelRect.height - rad - rad/2 - (int)control.getPrice(day-1)/drawYIncrement;
-                if (control.getPrice(i-1) < control.getPrice())
+                if (control.getPrice(day-1) <= control.getPrice(day))
                     g2.setColor(Color.green.darker());
                 else
                     g2.setColor(Color.red);
